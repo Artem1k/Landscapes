@@ -1,8 +1,5 @@
-import math
 import random
 import copy
-from visualize_3d_terrain import *
-import time
 
 
 class GenerateTerrain:
@@ -12,8 +9,6 @@ class GenerateTerrain:
         self.length = self.size + 1
         self.mat = [[0] * self.length for _ in range(self.length)]
         self.random_values = [[None] * self.length for _ in range(self.length)]
-        # self.mat = np.zeros((self.length, self.length))
-        # self.random_values = np.zeros((self.length, self.length))
         self.smoothness = 0.5
         self.get_h = self.get_h
 
@@ -115,8 +110,9 @@ class Terrain:
     def __init__(self, size):
         self.square_terrain = GenerateTerrain(size)
         self.square_terrain.iterate()
+        # self.terrain = copy.deepcopy(self.square_terrain.mat)
 
-    def visualize(self, sizer):
+    def change_size(self, sizer):
         terrain = copy.deepcopy(self.square_terrain.mat)
         counter = self.square_terrain.sizer - sizer
         span = pow(2, counter)
@@ -124,14 +120,13 @@ class Terrain:
         while counter > 0:
             for i in range(0, self.square_terrain.size, span):
                 for col in terrain:
-                    col[i + half] = None
+                    col[i + half] = None  # Ignore emphasis
                 terrain[i + half] = [None] * self.square_terrain.length
             counter -= 1
             span = half
             half //= 2
         terrain = [list(filter(lambda el: el is not None, row)) for row in terrain if
                    any(el is not None for el in row)]
-        visualize_terrain_3d(terrain)
 
     def set_smoothness(self, sm):
         self.square_terrain.set_smoothness(sm)

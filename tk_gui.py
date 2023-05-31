@@ -1,10 +1,10 @@
-import time
-
 from terrain import *
+from visualize_3d_terrain import *
 import tkinter as tk
 from tkinter import ttk
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
-MAX_VAL = 10
+MAX_VAL = 6
 
 
 def update_terrain():
@@ -14,14 +14,12 @@ def update_terrain():
 
     # Generate the terrain with the updated parameters
     global terrain
-    # terrain = generate_terrain(size, smoothness)
     plt.clf()  # Clear the previous plot
-    # visualize_terrain_3d(terrain)  # Visualize the updated terrain
-    terrain.set_smoothness(sm=smoothness)
-    terrain.visualize(sizer=size)
-
-    plt.draw()  # Redraw the figure
-    # Update the visualization with the new terrain
+    terrain.set_smoothness(smoothness)
+    terrain.change_size(sizer=size)
+    visualize_terrain_3d(terrain.square_terrain.mat)
+    # Redraw the canvas
+    canvas.draw()
 
 
 # Create the tkinter window
@@ -29,33 +27,33 @@ window = tk.Tk()
 window.title("Terrain Generator")
 
 # Define the parameters and their initial values
-
-size = 7
+size = 6
 smoothness = 0.5
 
+terrain = Terrain(MAX_VAL)
+
 # Create sliders for width, height, and smoothness
-size_label = ttk.Label(window, text="size")
+size_label = ttk.Label(window, text="Size")
 size_label.pack()
 size_slider = ttk.Scale(window, from_=1, to=MAX_VAL, value=size, orient=tk.HORIZONTAL, variable=tk.IntVar())
 size_slider.pack()
 
 smoothness_label = ttk.Label(window, text="Smoothness")
 smoothness_label.pack()
-smoothness_slider = ttk.Scale(window, from_=0.5, to=2, value=smoothness, orient=tk.HORIZONTAL, variable=tk.IntVar())
+smoothness_slider = ttk.Scale(window, from_=0, to=2, value=smoothness, orient=tk.HORIZONTAL, variable=tk.DoubleVar())
 smoothness_slider.pack()
 
 # Create a button to update the terrain
 update_button = ttk.Button(window, text="Update Terrain", command=update_terrain)
 update_button.pack()
 
-# Create a terrain
-# terrain = GenerateTerrain(MAX_VAL)
-# terrain.iterate()
-# figure = Terrain(square_terrain=terrain)
+# Create a blank figure and canvas for Matplotlib plot
+# figure = plt.figure()
+canvas = FigureCanvasTkAgg(figure, master=window)
+canvas.get_tk_widget().pack()
 
-terrain = Terrain(MAX_VAL)
-# Visualize the terrain in 3D
-terrain.visualize(sizer=size)
+# Visualize the initial terrain
+visualize_terrain_3d(terrain.square_terrain.mat)
 
 # Start the tkinter event loop
 window.mainloop()
