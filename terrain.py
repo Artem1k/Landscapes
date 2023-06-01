@@ -110,7 +110,7 @@ class Terrain:
     def __init__(self, size):
         self.square_terrain = GenerateTerrain(size)
         self.square_terrain.iterate()
-        # self.terrain = copy.deepcopy(self.square_terrain.mat)
+        self.terrain = None
 
     def change_size(self, sizer):
         terrain = copy.deepcopy(self.square_terrain.mat)
@@ -125,7 +125,7 @@ class Terrain:
             counter -= 1
             span = half
             half //= 2
-        terrain = [list(filter(lambda el: el is not None, row)) for row in terrain if
+        self.terrain = [list(filter(lambda el: el is not None, row)) for row in terrain if
                    any(el is not None for el in row)]
 
     def set_smoothness(self, sm):

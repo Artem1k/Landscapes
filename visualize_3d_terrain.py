@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 
 
-def visualize_terrain_3d(terrain):
+def visualize_terrain_3d(terrain, var):
     # Convert the terrain data to a NumPy array
     terrain_array = np.array(terrain)
 
@@ -22,7 +22,10 @@ def visualize_terrain_3d(terrain):
     ax.set_xlabel('X')
     ax.set_ylabel('Y')
     ax.set_zlabel('Elevation')
-    ax.set_title('Fractal Terrain')
+    ax.set_axis_off()
+    if var:
+        ax.set_axis_on()
+    # ax.set_title('Fractal Terrain')
 
 
 figure = plt.figure()
