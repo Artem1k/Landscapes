@@ -22,10 +22,16 @@ def update_terrain():
     canvas.draw()
 
 
+def quit_me():
+    print('quit')
+    window.quit()
+    window.destroy()
+
+
 # Create the tkinter window
 window = tk.Tk()
 window.title("Terrain Generator")
-
+window.protocol("WM_DELETE_WINDOW", quit_me)
 # Define the parameters and their initial values
 size = 6
 smoothness = 0.5
