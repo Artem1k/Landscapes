@@ -3,19 +3,20 @@ import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 
 H = 0.5
-nmax = 6
-length = 2**nmax + 1
-step = 2**nmax
+n_max = 6
+length = 2 ** n_max + 1
+step = 2 ** n_max
 half_step = step // 2
 
 x = np.linspace(0, 1, length)
 y = x
 x, y = np.meshgrid(x, y)
 z = np.zeros_like(x)
-fig = plt.figure(figsize=(6, 5))
+fig = plt.figure()
+
 ax = fig.add_subplot(111, projection='3d')
-# ax = plt.axes(projection='3d')
-for n in range(1, nmax+1):
+# Generate your 3D plot
+for n in range(1, n_max + 1):
     rng = 2**(-2*n*H)
     for i in range(0, length-step, step):
         for j in range(0, length-step, step):
@@ -35,5 +36,7 @@ for n in range(1, nmax+1):
     ax.set_ylim(0, 1)
     ax.set_zlim(-0.5, 0.5)
     ax.axis('off')
-    plt.pause(0.5)  # Adjust the pause duration as needed
+    ax.set_position([0, 0, 1, 1])
+    plt.pause(0.2)  # Adjust the pause duration as needed
+
 plt.show()
