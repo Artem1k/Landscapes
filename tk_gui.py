@@ -43,7 +43,10 @@ def update_terrain(var):
 
 
 def update_size_label(value):
-    size_label_value.config(text=str(int(float(value))) + ' pow of 2 = ' + str(2 ** int(float(value))))
+    sizer = 2 ** int(float(value)) + 1
+    sizer_str = str(sizer)
+    size_label_value.config(text=str(int(float(value))) + ' pow of 2 = ' + sizer_str + '*' + sizer_str + ' = ' +
+                                 str(sizer ** 2))
 
 
 def update_smoothness_label(value):
@@ -71,7 +74,7 @@ window.grid_rowconfigure(2, weight=10)
 # Create a slider for size
 size_label = ttk.Label(window, text="Size")
 size_label.grid(row=0, column=0)
-size_slider = ttk.Scale(window, from_=1, to=MAX_VAL, value=size, orient=tk.HORIZONTAL, variable=tk.IntVar())
+size_slider = ttk.Scale(window, from_=1, to=MAX_VAL + 1, value=size, orient=tk.HORIZONTAL, variable=tk.IntVar())
 size_slider.grid(row=0, column=1, sticky="ew")
 # Create a label to display the current value of the size slider
 size_label_value = ttk.Label(window)
