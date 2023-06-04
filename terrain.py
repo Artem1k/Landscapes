@@ -91,6 +91,10 @@ class GenerateTerrain:
                 if nu[1] < 0:
                     nu[1] = self.size - half
 
+                nl = [x - half, y + half]
+                if nl[0] < 0:
+                    nl[0] = self.size - half
+
                 nr = [x + half * 3, y + half]
                 if nr[0] > self.size:
                     nr[0] = half
@@ -98,10 +102,6 @@ class GenerateTerrain:
                 ndo = [x + half, y + half * 3]
                 if ndo[1] > self.size:
                     ndo[1] = half
-
-                nl = [x - half, y + half]
-                if nl[0] < 0:
-                    nl[0] = self.size - half
 
                 self.square_helper(depth, na, nu, nb, ne, nab)
                 self.square_helper(depth, nb, nr, nc, ne, nbc)

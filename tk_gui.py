@@ -4,7 +4,7 @@ import tkinter as tk
 from tkinter import ttk
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolbar2Tk
 
-MAX_VAL = 7
+MAX_VAL = 8
 
 
 def quit_me():
@@ -43,7 +43,11 @@ def update_terrain(var):
 
 
 def update_size_label(value):
-    size_label_value.config(text=str(int(float(value))) + ' pow of 2 = ' + str(2 ** int(float(value))))
+    sizer = 2 ** int(float(value)) + 1
+    sizer_str = str(sizer)
+    # size_label_value.config(text=str(int(float(value))) + ' pow of 2 = ' + sizer_str + '*' + sizer_str + ' = ' +
+    #                              str(sizer ** 2))
+    size_label_value.config(text=f'{str(int(float(value)))} pow of 2 = {sizer_str} * {sizer_str} = {str(sizer ** 2)}')
 
 
 def update_smoothness_label(value):
