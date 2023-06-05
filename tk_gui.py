@@ -45,8 +45,6 @@ def update_terrain(var):
 def update_size_label(value):
     sizer = 2 ** int(float(value)) + 1
     sizer_str = str(sizer)
-    # size_label_value.config(text=str(int(float(value))) + ' pow of 2 = ' + sizer_str + '*' + sizer_str + ' = ' +
-    #                              str(sizer ** 2))
     size_label_value.config(text=f'{str(int(float(value)))} pow of 2 = {sizer_str} * {sizer_str} = {str(sizer ** 2)}')
 
 
