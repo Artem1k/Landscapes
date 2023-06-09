@@ -1,4 +1,4 @@
-import random
+from numpy import random
 import copy
 
 
@@ -11,25 +11,21 @@ class GenerateTerrain:
         self.random_values = [[None] * self.length for _ in range(self.length)]
         self.smoothness = 0.5
         self.get_h = self.get_h
-
-    def set_smoothness(self, sm):
-        # It is used to update
-        self.smoothness = sm
-        self.get_h = self.new_h
+        self.frames = None
 
     def iterate(self):
-        # Performs the iteration of the Diamond-Square algorithm to generate the terrain.
-        counter = 1
-        while counter <= self.sizer:
-            num_segs = 1 << (counter - 1)
+        """Performs the iteration of the Diamond-Square algorithm to generate the terrain."""
+        self.frames = [[[0] * self.length for _ in range(self.length)]]
+        for counter in range(self.sizer):
+            num_segs = 1 << counter
             span = self.size // num_segs
             half = span // 2
-            self.diamond(counter, span, half)
-            self.square(counter, span, half)
-            counter += 1
+            self.diamond(counter + 1, span, half)
+            self.square(counter + 1, span, half)
+            self.frames.append(copy.deepcopy(self.mat))
 
     def diamond(self, depth, span, half):
-        # Performs the diamond step of the Diamond-Square algorithm for a given depth and span.
+        """Performs the diamond step of the Diamond-Square algorithm for a given depth and span."""
         for y in range(0, self.size, span):
             for x in range(0, self.size, span):
                 # e = avg(a, b, c, d)
@@ -56,7 +52,7 @@ class GenerateTerrain:
                 self.mat[ne[1]][ne[0]] = avg + offset
 
     def square(self, depth, span, half):
-        # Performs the square step of the Diamond-Square algorithm for a given depth and span.
+        """Performs the square step of the Diamond-Square algorithm for a given depth and span."""
         for y in range(0, self.size, span):
             for x in range(0, self.size, span):
                 # If second iteration, then
@@ -114,29 +110,29 @@ class GenerateTerrain:
             self.mat[self.size][x] = self.mat[0][x]
 
     def square_helper(self, depth, *args):
-        # Helper function for the square step that calculates the average height and offset
-        # and applies this for last given node.
+        """Helper function for the square step that calculates the average height and offset
+        and applies this for last given node."""
         heights = [self.mat[n[1]][n[0]] for n in args[:-1]]
         avg = self.average(heights)
         offset = self.get_h(depth, args[-1])
         self.mat[args[-1][1]][args[-1][0]] = avg + offset
 
     def get_h(self, depth, el):
-        # Calculates the random height offset for a given element based on the current depth and smoothness.
+        """Calculates the random height offset for a given element based on the current depth and smoothness."""
         h = self.h(depth, self.smoothness)
         rand = random.random()
         self.random_values[el[1]][el[0]] = rand  # Ignore emphasis
         return (1 - 2 * rand) * h
 
     def new_h(self, depth, el):
-        # An alternative implementation of get_h that takes pre-computed random values. It is used to update
+        """An alternative implementation of get_h that takes pre-computed random values. It is used to update"""
         h = self.h(depth, self.smoothness)
         rand = self.random_values[el[1]][el[0]]
         return (1 - 2 * rand) * h  # Ignore emphasis
 
     @staticmethod
-    # Sets limit for selecting a random offset
     def h(d, s):
+        """Sets limit for selecting a random offset"""
         return pow(2, -2 * d * s)
 
     @staticmethod
@@ -146,30 +142,30 @@ class GenerateTerrain:
 
 class Terrain:
     def __init__(self, size: int):
-        # Initializes the Terrain object with a given size parameter.
-        # It creates an instance of GenerateTerrain and generates the initial terrain.
+        """Initializes the Terrain object with a given size parameter.
+        It creates an instance of GenerateTerrain and generates the initial terrain."""
         self.square_terrain = GenerateTerrain(size)
         self.square_terrain.iterate()
+        self.square_terrain.get_h = self.square_terrain.new_h
         self.updated_terrain = None
 
     def change_size(self, sizer: int):
-        # It is used to update
+        """It is used to update"""
         terrain = copy.deepcopy(self.square_terrain.mat)
         counter = self.square_terrain.sizer - sizer
         span = pow(2, counter)
         half = span // 2
-        while counter > 0:
+        for _ in range(counter):
             for i in range(0, self.square_terrain.size, span):
                 for col in terrain:
                     col[i + half] = None  # Ignore emphasis
                 terrain[i + half] = [None] * self.square_terrain.length
-            counter -= 1
             span = half
             half //= 2
         self.updated_terrain = [list(filter(lambda el: el is not None, row)) for row in terrain if
                                 any(el is not None for el in row)]
 
     def set_smoothness(self, sm):
-        # It is used to update
-        self.square_terrain.set_smoothness(sm)
+        """It is used to update"""
+        self.square_terrain.smoothness = sm
         self.square_terrain.iterate()

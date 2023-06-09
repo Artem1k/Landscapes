@@ -1,10 +1,21 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from matplotlib import animation
+from matplotlib.animation import FuncAnimation
 from mpl_toolkits.mplot3d import Axes3D
 
 
-def visualize_terrain_3d(terrain, var, canvas):
+# Some animation
+def animation_rotate(ax, canvas):
+    def animate(i):
+        ax.view_init(elev=30, azim=i)
+        return figure
+
+    ani = FuncAnimation(figure, animate, frames=360, interval=10, blit=False)
+    canvas.draw()
+
+
+def visualize_terrain_3d(terrain: list, var, canvas, ani_var):
+    plt.clf()
     # Convert the terrain data to a NumPy array
     terrain_array = np.array(terrain)
 
@@ -30,14 +41,27 @@ def visualize_terrain_3d(terrain, var, canvas):
         ax.set_axis_on()
     ax.set_zlim(-0.5, 0.5)
 
-    # Some animation
-    # def animate(i):
-    #     ax.view_init(elev=20, azim=i*4)
-    #     return figure
-    # ani = animation.FuncAnimation(figure, animate, frames=90, interval=200, blit=False)
+    # ax.set_title('Fractal Terrain')
+    if ani_var:
+        animation_rotate(ax, canvas)
 
     canvas.draw()
-    # ax.set_title('Fractal Terrain')
+
+
+def visualize_first_terrain_3d(terrain, var, canvas, ani_var):
+    terrain_frames = terrain.square_terrain.frames
+
+    def update_figure(i):
+        if i == len(terrain_frames):
+            if ani_var:
+                visualize_terrain_3d(terrain_frames[-1], var, canvas, ani_var)
+        else:
+            terrain_list = terrain_frames[i]
+            visualize_terrain_3d(terrain_list, var, canvas, False)
+
+    animation = FuncAnimation(figure, update_figure, frames=len(terrain_frames) + 1, interval=200, repeat=False)
+
+    canvas.draw()
 
 
 figure = plt.figure()
