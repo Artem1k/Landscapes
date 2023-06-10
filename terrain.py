@@ -133,7 +133,7 @@ class GenerateTerrain:
     @staticmethod
     def h(d, s):
         """Sets limit for selecting a random offset"""
-        return pow(2, -2 * d * s)
+        return pow(2, -2 * d * s) * 15
 
     @staticmethod
     def average(numbers):

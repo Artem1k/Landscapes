@@ -8,6 +8,7 @@ MAX_VAL = 8
 
 
 def quit_me():
+    export_plot(out_terrain.updated_terrain)
     window.quit()
     window.destroy()
 
@@ -15,28 +16,18 @@ def quit_me():
 def new_terrain():
     global out_terrain
     out_terrain = Terrain(MAX_VAL)
+    out_terrain.change_size(size)
     visualize_first_terrain_3d(out_terrain, var=button_var.get(), canvas=canvas, ani_var=button_animation_var.get())
 
 
-def toggle_button():
-    if button_var.get():
-        button_var.set(False)
-        button.config(text="AXIS_OFF")
+def toggle_button(var, but, txt):
+    if var.get():
+        var.set(False)
+        but.config(text=f"{txt}_OFF")
         update_terrain(False)
     else:
-        button_var.set(True)
-        button.config(text="AXIS_ON")
-        update_terrain(True)
-
-
-def anima_button():
-    if button_animation_var.get():
-        button_animation_var.set(False)
-        button_animation.config(text="ANI_OFF")
-        update_terrain(False)
-    else:
-        button_animation_var.set(True)
-        button_animation.config(text="ANI_ON")
+        var.set(True)
+        but.config(text=f"{txt}_ON")
         update_terrain(True)
 
 
@@ -56,7 +47,7 @@ def update_terrain(var):
 
 def update_size_label(value):
     sizer = 2 ** int(float(value))
-    size_label_value.config(text=f'{str(int(float(value)))} pow of 2 = ({sizer}+1)*({sizer}+1) = {str(sizer ** 2)}')
+    size_label_value.config(text=f'{str(int(float(value)))} pow of 2 = ({sizer}+1)*({sizer}+1) = {(sizer + 1) ** 2}')
 
 
 def update_smoothness_label(value):
@@ -112,7 +103,7 @@ new_button.grid(row=0, column=3, sticky="nsew")
 
 # Button for setting axis ON/OFF
 button_var = tk.BooleanVar()
-button = tk.Button(window, text="AXIS_OFF", command=toggle_button)
+button = tk.Button(window, text="AXIS_OFF", command=lambda: toggle_button(button_var, button, 'AXIS'))
 button.grid(row=1, column=3, sticky="nsew")
 
 # Create a blank figure and canvas for Matplotlib plot
@@ -123,11 +114,16 @@ toolbarFrame = tk.Frame(master=window)
 toolbarFrame.grid(row=3, columnspan=3, sticky="nsew")
 toolbar = NavigationToolbar2Tk(canvas, toolbarFrame)
 toolbar.update()
-toolbar.pack(side=tk.LEFT)
+toolbar.pack(side=tk.LEFT)  # (anchor='w') as an alternative
+
+# Create a button to generate a new terrain
+# save_button = ttk.Button(window, text="Save 3D plot", command=export_plot(out_terrain.updated_terrain))
+# save_button.grid(row=3, column=2, sticky="nsew")
 
 # Button for setting axis ON/OFF
 button_animation_var = tk.BooleanVar(value=True)
-button_animation = tk.Button(window, text="ANI_ON", command=anima_button)
+button_animation = tk.Button(window, text="ANI_ON",
+                             command=lambda: toggle_button(button_animation_var, button_animation, 'ANI'))
 button_animation.grid(row=3, column=3, sticky="nsew")
 
 # Visualize the initial terrain
