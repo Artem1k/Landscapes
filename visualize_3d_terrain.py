@@ -27,17 +27,19 @@ def visualize_terrain_3d(terrain: list, var, canvas, ani_var):
     x_grid, y_grid = np.meshgrid(x, y)
 
     # Create a 3D plot
-    ax = figure.add_subplot(111, projection='3d')
-    ax.set_position([0, 0, 1, 1])  # Set the position and size of the subplot within the figure
+    ax = figure.add_subplot(111, projection="3d")
+    ax.set_position(
+        [0, 0, 1, 1]
+    )  # Set the position and size of the subplot within the figure
     ax.set_box_aspect([2, 2, 1])
 
     # Plot the terrain surface using matplotlib's plot_surface function
-    ax.plot_surface(x_grid, y_grid, terrain_array, cmap='terrain')
+    ax.plot_surface(x_grid, y_grid, terrain_array, cmap="terrain")
 
     # Set labels and title, axis and limits
-    ax.set_xlabel('X')
-    ax.set_ylabel('Y')
-    ax.set_zlabel('Elevation')
+    ax.set_xlabel("X")
+    ax.set_ylabel("Y")
+    ax.set_zlabel("Elevation")
     ax.set_axis_off()
     if var:
         ax.set_axis_on()
@@ -64,7 +66,13 @@ def visualize_first_terrain_3d(terrain, var, canvas, ani_var):
             terrain_list = terrain_frames[i]
             visualize_terrain_3d(terrain_list, var, canvas, False)
 
-    animation = FuncAnimation(figure, update_figure, frames=len(terrain_frames) + 1, interval=200, repeat=False)
+    animation = FuncAnimation(
+        figure,
+        update_figure,
+        frames=len(terrain_frames) + 1,
+        interval=200,
+        repeat=False,
+    )
 
     canvas.draw()
 
@@ -78,7 +86,9 @@ def export_plot(terrain):
     x_grid, y_grid = np.meshgrid(x, y)
 
     # Convert the data to mesh representation
-    vertices = np.column_stack([x_grid.flatten(), y_grid.flatten(), terrain_array.flatten()])
+    vertices = np.column_stack(
+        [x_grid.flatten(), y_grid.flatten(), terrain_array.flatten()]
+    )
 
     # Generate the triangular faces
     rows, cols = terrain_array.shape
@@ -99,7 +109,7 @@ def export_plot(terrain):
     mesh_data.update_normals()
 
     # Save the mesh to an STL file
-    mesh_data.save('terrain.stl')
+    mesh_data.save("terrain.stl")
 
 
 figure = plt.figure()

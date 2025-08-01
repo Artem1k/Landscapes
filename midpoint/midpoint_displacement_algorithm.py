@@ -12,8 +12,10 @@ def generate_landscape(size, h):
     while step_size > 1:
         ranged = pow(2, -2 * n * h)
         for i in range(0, size - step_size - 1, step_size):
-            landscape[i + half_step] = 0.5 * (landscape[i] + landscape[i + step_size]) + (
-                        1 - 2 * random.random()) * ranged
+            landscape[i + half_step] = (
+                0.5 * (landscape[i] + landscape[i + step_size])
+                + (1 - 2 * random.random()) * ranged
+            )
         step_size = half_step
         half_step = step_size // 2
         n += 1
@@ -37,7 +39,7 @@ def visualize_landscape(landscape):
     plt.xlabel("X")
     plt.ylabel("Y")
     plt.axis([x[0], x[-1], -0.5, 0.5])
-    plt.axis('off')
+    plt.axis("off")
     plt.show()
 
 

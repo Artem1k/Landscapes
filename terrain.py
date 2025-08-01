@@ -5,7 +5,7 @@ import copy
 class GenerateTerrain:
     def __init__(self, sizer: int):
         self.sizer = sizer
-        self.size = 2 ** sizer
+        self.size = 2**sizer
         self.length = self.size + 1
         self.mat = [[0] * self.length for _ in range(self.length)]
         self.random_values = [[None] * self.length for _ in range(self.length)]
@@ -162,8 +162,11 @@ class Terrain:
                 terrain[i + half] = [None] * self.square_terrain.length
             span = half
             half //= 2
-        self.updated_terrain = [list(filter(lambda el: el is not None, row)) for row in terrain if
-                                any(el is not None for el in row)]
+        self.updated_terrain = [
+            list(filter(lambda el: el is not None, row))
+            for row in terrain
+            if any(el is not None for el in row)
+        ]
 
     def set_smoothness(self, sm):
         """It is used to update"""

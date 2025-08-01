@@ -17,7 +17,12 @@ def new_terrain():
     global out_terrain
     out_terrain = Terrain(MAX_VAL)
     out_terrain.change_size(size)
-    visualize_first_terrain_3d(out_terrain, var=button_var.get(), canvas=canvas, ani_var=button_animation_var.get())
+    visualize_first_terrain_3d(
+        out_terrain,
+        var=button_var.get(),
+        canvas=canvas,
+        ani_var=button_animation_var.get(),
+    )
 
 
 def toggle_button(var, but, txt):
@@ -42,12 +47,16 @@ def update_terrain(var):
     ani_var = button_animation_var.get()
     new_size = int(size_slider.get())
     out_terrain.change_size(sizer=new_size)
-    visualize_terrain_3d(out_terrain.updated_terrain, var=var, canvas=canvas, ani_var=ani_var)
+    visualize_terrain_3d(
+        out_terrain.updated_terrain, var=var, canvas=canvas, ani_var=ani_var
+    )
 
 
 def update_size_label(value):
     sizer = 2 ** int(float(value))
-    size_label_value.config(text=f'{str(int(float(value)))} pow of 2 = ({sizer}+1)*({sizer}+1) = {(sizer + 1) ** 2}')
+    size_label_value.config(
+        text=f"{str(int(float(value)))} pow of 2 = ({sizer}+1)*({sizer}+1) = {(sizer + 1) ** 2}"
+    )
 
 
 def update_smoothness_label(value):
@@ -76,8 +85,14 @@ window.grid_rowconfigure(2, weight=10)
 # Create a slider for size
 size_label = ttk.Label(window, text="Size")
 size_label.grid(row=0, column=0)
-size_slider = ttk.Scale(window, from_=0, to=MAX_VAL, value=size, orient=tk.HORIZONTAL,
-                        command=lambda value: [update_terrain(value), update_size_label(value)])
+size_slider = ttk.Scale(
+    window,
+    from_=0,
+    to=MAX_VAL,
+    value=size,
+    orient=tk.HORIZONTAL,
+    command=lambda value: [update_terrain(value), update_size_label(value)],
+)
 size_slider.grid(row=0, column=1, sticky="ew")
 # Create a label to display the current value of the size slider
 size_label_value = ttk.Label(window)
@@ -88,8 +103,17 @@ update_size_label(size_slider.get())
 # Create a slider for smoothness
 smoothness_label = ttk.Label(window, text="Smoothness")
 smoothness_label.grid(row=1, column=0)
-smoothness_slider = ttk.Scale(window, from_=0, to=2, value=smoothness, orient=tk.HORIZONTAL,
-                              command=lambda value: [update_terrain_smoothness(value), update_smoothness_label(value)])
+smoothness_slider = ttk.Scale(
+    window,
+    from_=0,
+    to=2,
+    value=smoothness,
+    orient=tk.HORIZONTAL,
+    command=lambda value: [
+        update_terrain_smoothness(value),
+        update_smoothness_label(value),
+    ],
+)
 smoothness_slider.grid(row=1, column=1, sticky="ew")
 # Create a label to display the current value of the smoothness slider
 smoothness_label_value = ttk.Label(window)
@@ -103,7 +127,9 @@ new_button.grid(row=0, column=3, sticky="nsew")
 
 # Button for setting axis ON/OFF
 button_var = tk.BooleanVar()
-button = tk.Button(window, text="AXIS_OFF", command=lambda: toggle_button(button_var, button, 'AXIS'))
+button = tk.Button(
+    window, text="AXIS_OFF", command=lambda: toggle_button(button_var, button, "AXIS")
+)
 button.grid(row=1, column=3, sticky="nsew")
 
 # Create a blank figure and canvas for Matplotlib plot
@@ -122,8 +148,11 @@ toolbar.pack(side=tk.LEFT)  # (anchor='w') as an alternative
 
 # Button for setting axis ON/OFF
 button_animation_var = tk.BooleanVar(value=True)
-button_animation = tk.Button(window, text="ANI_ON",
-                             command=lambda: toggle_button(button_animation_var, button_animation, 'ANI'))
+button_animation = tk.Button(
+    window,
+    text="ANI_ON",
+    command=lambda: toggle_button(button_animation_var, button_animation, "ANI"),
+)
 button_animation.grid(row=3, column=3, sticky="nsew")
 
 # Visualize the initial terrain
