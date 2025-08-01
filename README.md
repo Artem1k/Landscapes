@@ -1,4 +1,4 @@
-# Landscape generator
+# Terrain generator
 
 This app generate the landscape using diamond-square alghorithm.
 
@@ -9,7 +9,7 @@ This app generate the landscape using diamond-square alghorithm.
 ```bash
 git clone https://github.com/Artem1k/Landscapes.git
 cd Landscapes
-pip install requirements.txt
+pip install -r requirements.txt
 
 # run
 python tk_gui.py
